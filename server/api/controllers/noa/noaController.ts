@@ -14,8 +14,9 @@ export class NoaController {
 
        //// res.status(200).send({responseCode: 200});
        try {
+            const idamSecret = process.env.IDAM_SECRET;
             const url = 'https://idam-api.aat.platform.hmcts.net/o/token'
-            const options = `grant_type=client_credentials&client_id=xuimowebapp&client_secret=yB71mnPeypP3HlcN&scope=profile roles manage-user create-user`
+            const options = `grant_type=client_credentials&client_id=xuimowebapp&client_secret=${idamSecret}&scope=profile roles manage-user create-user`
             const response = await http.post(url, options) as any
 
             const s2sToken = await generateS2sToken('http://rpe-service-auth-provider-aat.service.core-compute-aat.internal');
