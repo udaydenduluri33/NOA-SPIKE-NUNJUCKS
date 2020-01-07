@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { http } from '../../../http';
 import { generateS2sToken } from '../../../s2sTokenGeneration';
-import axios, { AxiosInstance } from 'axios'
+import axios from 'axios'
 
 export interface noaResponse {
     responseCode: number
@@ -15,9 +15,17 @@ export class NoaController {
        //// res.status(200).send({responseCode: 200});
        try {
             const idamSecret = process.env.IDAM_SECRET;
+            console.log('idamsecret is', idamSecret);
             const url = 'https://idam-api.aat.platform.hmcts.net/o/token'
-            const options = `grant_type=client_credentials&client_id=xuimowebapp&client_secret=${idamSecret}&scope=profile roles manage-user create-user`
+            const password = process.env.PASSWORD;
+            const options = `username=claire_fr_mumford@yahoo.com&password=${password}&grant_type=password&client_id=xuiwebapp&client_secret=${idamSecret}&scope=openid profile roles`
+
+            // const headers = {
+            //     'Content-Type': 'application/json'
+            // }
             const response = await http.post(url, options) as any
+
+            // console.log('response.data', response.data);
 
             const s2sToken = await generateS2sToken('http://rpe-service-auth-provider-aat.service.core-compute-aat.internal');
 
@@ -32,8 +40,9 @@ export class NoaController {
             const cid = '1576252262902660';
 
             const ccUrl = `/caseworkers/${uid}/jurisdictions/${jid}/case-types/${ctid}/cases/${cid}/users`;
+            console.log('before');
             ////axios.defaults.headers.common['user-roles'] = response.data.roles.join();
-            const ccdResponse = await http.post(`http://ccd-data-store-api-aat.service.core-compute-aat.internal${ccUrl}`, data);
+            const ccdResponse = await axios.post(`http://ccd-data-store-api-aat.service.core-compute-aat.internal${ccUrl}`, data);
             ////return ccdResponse.data;
 
             const confirmation = {
