@@ -18,7 +18,15 @@ export class NoaController {
             console.log('idamsecret is', idamSecret);
             const url = 'https://idam-api.aat.platform.hmcts.net/o/token'
             const password = process.env.PASSWORD;
-            const options = `username=claire_fr_mumford@yahoo.com&password=${password}&grant_type=password&client_id=xuiwebapp&client_secret=${idamSecret}&scope=openid profile roles`
+            const email = 'claire_fr_mumford@yahoo.com'
+            if(email !== req.body.email) {
+                const errorMessage = {
+                    message: 'email of the user seems to be different'
+                };
+                
+                return res.render('error.html', errorMessage);
+            }
+            const options = `username=${email}&password=${password}&grant_type=password&client_id=xuiwebapp&client_secret=${idamSecret}&scope=openid profile roles`
 
             // const headers = {
             //     'Content-Type': 'application/json'
@@ -33,17 +41,23 @@ export class NoaController {
             axios.defaults.headers.common.Authorization = `Bearer ${bearerToken}`;
             axios.defaults.headers.common.ServiceAuthorization = s2sToken
 
-            const data = {id: '63bdc75b-cc3a-4000-852b-bb218a998ddf'};
+            const data = {id: 'fc370ebb-4af1-4733-8a4f-4c4fc8e249ba'};
             const uid = req.body.caseRef; //'63bdc75b-cc3a-4000-852b-bb218a998ddf';
             const jid = 'DIVORCE';
-            const ctid = 'FinancialRemedyForDAC';
-            const cid = '1576252262902660';
+            const ctid = 'createMyAddress';
+            const cid = '1569409234004327';
 
-            const ccUrl = `/caseworkers/${uid}/jurisdictions/${jid}/case-types/${ctid}/cases/${cid}/users`;
+            const ccUrl = `/caseworkers/94785/jurisdictions/${jid}/case-types/${ctid}/cases/${cid}/users`;
             console.log('before');
             ////axios.defaults.headers.common['user-roles'] = response.data.roles.join();
             const ccdResponse = await axios.post(`http://ccd-data-store-api-aat.service.core-compute-aat.internal${ccUrl}`, data);
             ////return ccdResponse.data;
+
+            //const getUrl = `/caseworkers/${uid}/jurisdictions/${jid}/case-types/${ctid}/cases/ids`;
+
+            //const ccdResponse = await axios.get(getUrl);
+
+            console.log('ccdResponse', ccdResponse);
 
             const confirmation = {
                 solicitor_name: '[SOLICITOR NAME]',
