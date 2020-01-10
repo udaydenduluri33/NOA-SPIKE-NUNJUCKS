@@ -44,8 +44,8 @@ export class NoaController {
             const data = {id: 'fc370ebb-4af1-4733-8a4f-4c4fc8e249ba'};
             const uid = req.body.caseRef; //'63bdc75b-cc3a-4000-852b-bb218a998ddf';
             const jid = 'DIVORCE';
-            const ctid = 'createMyAddress';
-            const cid = '1569409234004327';
+            const ctid = 'DIVORCE';
+            const cid = '1567682041533280';
 
             const ccUrl = `/caseworkers/94785/jurisdictions/${jid}/case-types/${ctid}/cases/${cid}/users`;
             console.log('before');
